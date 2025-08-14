@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -6,6 +6,27 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
 }
+
+#success-message,
+#error-message {
+    transition: opacity 0.5s ease-in-out;
+}
+
+#success-message.opacity-0,
+#error-message.opacity-0 {
+    opacity: 0;
+}
+
+@keyframes spin-text {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.spin-text-slow {
+  animation: spin-text 10s linear infinite;
+  transform-origin: 64px 64px; /* tâm của SVG */
+}
+</style>

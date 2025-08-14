@@ -35,8 +35,8 @@ class HomeController extends Controller
     {
         return view('contact');
     }
-        public function users()
+    public function cart()
     {
-        return view('admin.users');
+        return view('cart', ['cart' => session('cart', [])]);
     }
 }
