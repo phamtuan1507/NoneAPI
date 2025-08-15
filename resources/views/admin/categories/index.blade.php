@@ -15,6 +15,8 @@
             <h1 class="text-2xl font-bold mb-6">Quản lý danh mục</h1>
             <a href="{{ route('admin.categories.create') }}"
                 class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">Thêm danh mục mới</a>
+            <a href="{{ route('admin.dashboard') }}" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">Quay
+                lại trang dashboard</a>
             <table class="w-full bg-white shadow-md rounded">
                 <thead>
                     <tr class="bg-gray-200">

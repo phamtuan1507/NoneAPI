@@ -13,6 +13,8 @@
     <main>
         <div class="container mx-auto px-4 py-8">
             <h1 class="text-2xl font-bold mb-6">Thêm bài viết mới</h1>
+            <a href="{{ route('admin.blogs.index') }}" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">Quay
+                lại trang Quản lý bài viết</a>
             <form action="{{ route('admin.blogs.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-4">
@@ -42,6 +44,8 @@
                     </select>
                 </div>
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Lưu</button>
+                                <button onclick="location.href='{{ route('admin.blogs.index') }}'" type="submit"
+                    class="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer">Quay lại</button>
             </form>
         </div>
     </main>

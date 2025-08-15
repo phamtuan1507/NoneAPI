@@ -51,13 +51,9 @@
                     </select>
                 </div>
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Cập nhật</button>
+                                <button onclick="location.href='{{ route('admin.blogs.index') }}'" type="submit"
+                    class="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer">Quay lại</button>
             </form>
-            @if (session('success'))
-                <div class="mt-4 text-green-600">{{ session('success') }}</div>
-            @endif
-            @if (session('error'))
-                <div class="mt-4 text-red-600">{{ session('error') }}</div>
-            @endif
         </div>
     </main>
 @endsection
