@@ -22,6 +22,13 @@
                         class="mt-1 block w-full border-gray-300 rounded-md" required>
                 </div>
                 <div class="mb-4">
+                    <label>Loại danh mục</label>
+                    <select name="type" required>
+                        <option value="product" {{ old('type') == 'product' ? 'selected' : '' }}>Sản phẩm</option>
+                        <option value="blog" {{ old('type') == 'blog' ? 'selected' : '' }}>Blog</option>
+                    </select>
+                </div>
+                <div class="mb-4">
                     <label for="description" class="block text-sm font-medium text-gray-700">Mô tả</label>
                     <textarea name="description" id="description" class="mt-1 block w-full border-gray-300 rounded-md">{{ $category->description }}</textarea>
                 </div>

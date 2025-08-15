@@ -2,46 +2,47 @@
 @extends('layouts.master')
 
 {{-- Đặt title cho page --}}
-@section('title', 'Quản lý danh mục')
+@section('title', 'Quản lý bài viết')
 
 {{-- Đặt file css cho page --}}
-@section('file', 'admin.categories')
+@section('file', 'admin.blogs.index')
 
 {{-- Đặt class cho body --}}
-@section('page', 'admin.categories')
+@section('page', 'admin.blogs.index')
 @section('content')
     <main>
         <div class="container mx-auto px-4 py-8">
-            <h1 class="text-2xl font-bold mb-6">Quản lý danh mục</h1>
-            <a href="{{ route('admin.categories.create') }}"
-                class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">Thêm danh mục mới</a>
+            <h1 class="text-2xl font-bold mb-6">Quản lý bài viết</h1>
+            <a href="{{ route('admin.blogs.create') }}"
+                class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">Thêm bài viết mới</a>
+            <a href="{{ route('admin.dashboard') }}" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">Quay
+                lại trang dashboard</a>
             <table class="w-full bg-white shadow-md rounded">
                 <thead>
                     <tr class="bg-gray-200">
                         <th class="py-2 px-4">Tên</th>
-                        <th class="py-2 px-4">Danh mục cha</th>
+                        <th class="py-2 px-4">Danh mục</th>
                         <th class="py-2 px-4">Hình ảnh</th>
-                        <th class="py-2 px-4">Loại danh mục</th>
                         <th class="py-2 px-4">Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($categories as $category)
+                    @foreach ($blogs as $blog)
                         <tr>
-                            <td class="border px-4 py-2">{{ $category->name }}</td>
-                            <td class="border px-4 py-2">{{ $category->parent ? $category->parent->name : 'Không có' }}</td>
+                            <td class="border px-4 py-2">{{ $blog->title }}</td>
+                            <td class="border px-4 py-2">{{ $blog->category ? $blog->category->name : 'Không có' }}
+                            </td>
                             <td class="border px-4 py-2">
-                                @if ($category->image)
-                                    <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}"
+                                @if ($blog->image)
+                                    <img src="{{ asset('storage/' . $blog->image) }}" alt="{{ $blog->title }}"
                                         class="w-16 h-16 object-cover">
                                 @else
                                     Không có
                                 @endif
                             </td>
-                            <td class="border px-4 py-2">{{ $category->type }}</td>
                             <td class="border px-4 py-2">
-                                <a href="{{ route('admin.categories.edit', $category->id) }}" class="text-blue-500">Sửa</a>
-                                <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST"
+                                <a href="{{ route('admin.blogs.edit', $blog->id) }}" class="text-blue-500">Sửa</a>
+                                <form action="{{ route('admin.blogs.destroy', $blog->id) }}" method="POST"
                                     class="inline">
                                     @csrf
                                     @method('DELETE')
@@ -53,6 +54,7 @@
                     @endforeach
                 </tbody>
             </table>
+            {{ $blogs->links() }}
         </div>
     </main>
 @endsection
