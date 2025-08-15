@@ -75,7 +75,7 @@
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" stroke-width="2" />
                     </svg>
                 </a>
-                <span
+                <span id="cart-count"
                     class="absolute -top-2 -right-2 bg-[#7a4a2f] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                     @php
                         $cartCount = \App\Models\CartItem::where('user_id', auth()->id())->sum('quantity');

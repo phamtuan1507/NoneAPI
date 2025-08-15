@@ -26,7 +26,7 @@
         @show
         @if (session('success'))
             <div id="success-message"
-                class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 mx-auto max-w-7xl relative overflow-hidden">
+                class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 mx-auto max-w-7xl relative overflow-hidden z-100">
                 <span class="block">{{ session('success') }}</span>
                 <div id="success-countdown"
                     class="absolute bottom-0 left-0 h-1 bg-green-500 transition-all duration-500 ease-linear"
@@ -36,7 +36,7 @@
 
         @if ($errors->any())
             <div id="error-message"
-                class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 mx-auto max-w-7xl relative overflow-hidden">
+                class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 mx-auto max-w-7xl relative overflow-hidden z-100">
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -50,7 +50,7 @@
 
         @if (session('error'))
             <div id="error-message"
-                class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 mx-auto max-w-7xl relative overflow-hidden">
+                class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 mx-auto max-w-7xl relative overflow-hidden z-100">
                 <ul>
                     <li>{{ session('error') }}</li>
                 </ul>

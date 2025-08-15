@@ -1,4 +1,4 @@
-{{-- Tất các các page cần extends từ master.blade.php --}}
+{{-- Tất cả các page cần extends từ master.blade.php --}}
 @extends('layouts.master')
 
 {{-- Đặt title cho page --}}
@@ -6,7 +6,6 @@
 
 {{-- Đặt file css cho page --}}
 @section('file', 'products')
-
 
 {{-- Đặt class cho body --}}
 @section('page', 'products')
@@ -132,14 +131,14 @@
                         `<span class="block">${data.message}</span><div id="success-countdown" class="absolute bottom-0 left-0 h-1 bg-green-500 transition-all duration-500 ease-linear" style="width: 100%;"></div>`;
                     document.body.insertBefore(successDiv, document.body.firstChild);
 
-                    // Cập nhật số lượng
-                    const cartCountElement = document.querySelector('.cart-count');
-                    if (cartCountElement) {
-                        cartCountElement.textContent = data.count;
+                    // Cập nhật số lượng trong header
+                    const cartCount = document.getElementById('cart-count');
+                    if (cartCount) {
+                        cartCount.textContent = data.count;
                         if (data.count > 0) {
-                            cartCountElement.style.display = 'inline-flex';
+                            cartCount.style.display = 'flex';
                         } else {
-                            cartCountElement.style.display = 'none';
+                            cartCount.style.display = 'none';
                         }
                     }
 
@@ -187,21 +186,29 @@
             });
     }
 
-    // Hàm cập nhật số lượng giỏ hàng trên header (giả định)
+    // Hàm cập nhật số lượng giỏ hàng trên header
     function updateCartCount() {
-        fetch('/cart/count', { // Định nghĩa route mới để lấy số lượng
+        fetch('/cart/count', {
                 headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                     'Accept': 'application/json',
                 }
             })
             .then(response => response.json())
             .then(data => {
-                const cartCountElement = document.querySelector('.cart-count');
-                if (cartCountElement) {
-                    cartCountElement.textContent = data.count;
+                const cartCount = document.getElementById('cart-count');
+                if (cartCount) {
+                    cartCount.textContent = data.count;
+                    if (data.count > 0) {
+                        cartCount.style.display = 'flex';
+                    } else {
+                        cartCount.style.display = 'none';
+                    }
                 }
             })
             .catch(error => console.error('Lỗi khi cập nhật số lượng:', error));
     }
+
+    // Gọi updateCartCount khi trang tải (nếu cần)
+    document.addEventListener('DOMContentLoaded', updateCartCount);
 </script>
