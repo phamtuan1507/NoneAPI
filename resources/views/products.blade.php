@@ -103,7 +103,21 @@
 @endsection
 <script>
     function addToCart(productId) {
-        fetch('{{ route('cart.add', ['productId' => ':id']) }}'.replace(':id', productId), {
+        fetch('/check-auth', { // Kiểm tra trạng thái đăng nhập
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Accept': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(authData => {
+            console.log('Auth data:', authData); // Kiểm tra giá trị authData
+            if (!authData.authenticated) {
+                showLoginPrompt();
+                return;
+            }
+
+            fetch('{{ route('cart.add', ['productId' => ':id']) }}'.replace(':id', productId), {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -122,7 +136,6 @@
             })
             .then(data => {
                 if (data.success) {
-                    // Thêm thông báo thành công động
                     const successDiv = document.createElement('div');
                     successDiv.id = 'success-message';
                     successDiv.className =
@@ -131,18 +144,11 @@
                         `<span class="block">${data.message}</span><div id="success-countdown" class="absolute bottom-0 left-0 h-1 bg-green-500 transition-all duration-500 ease-linear" style="width: 100%;"></div>`;
                     document.body.insertBefore(successDiv, document.body.firstChild);
 
-                    // Cập nhật số lượng trong header
                     const cartCount = document.getElementById('cart-count');
                     if (cartCount) {
                         cartCount.textContent = data.count;
-                        if (data.count > 0) {
-                            cartCount.style.display = 'flex';
-                        } else {
-                            cartCount.style.display = 'none';
-                        }
                     }
 
-                    // Ẩn thông báo sau 5 giây
                     setTimeout(() => {
                         const countdown = successDiv.querySelector('#success-countdown');
                         let width = 100;
@@ -156,7 +162,6 @@
                         }, 50);
                     }, 0);
                 } else {
-                    // Thêm thông báo lỗi động
                     const errorDiv = document.createElement('div');
                     errorDiv.id = 'error-message';
                     errorDiv.className =
@@ -165,7 +170,6 @@
                         `<ul><li>${data.message}</li></ul><div id="error-countdown" class="absolute bottom-0 left-0 h-1 bg-red-500 transition-all duration-300 ease-linear" style="width: 100%;"></div>`;
                     document.body.insertBefore(errorDiv, document.body.firstChild);
 
-                    // Ẩn thông báo sau 3 giây
                     setTimeout(() => {
                         const countdown = errorDiv.querySelector('#error-countdown');
                         let width = 100;
@@ -184,31 +188,53 @@
                 console.error('Lỗi:', error);
                 alert('Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng. Chi tiết: ' + error.message);
             });
+        })
+        .catch(error => console.error('Lỗi kiểm tra đăng nhập:', error));
     }
 
     // Hàm cập nhật số lượng giỏ hàng trên header
     function updateCartCount() {
         fetch('/cart/count', {
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Accept': 'application/json',
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                const cartCount = document.getElementById('cart-count');
-                if (cartCount) {
-                    cartCount.textContent = data.count;
-                    if (data.count > 0) {
-                        cartCount.style.display = 'flex';
-                    } else {
-                        cartCount.style.display = 'none';
-                    }
-                }
-            })
-            .catch(error => console.error('Lỗi khi cập nhật số lượng:', error));
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Accept': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const cartCount = document.getElementById('cart-count');
+            if (cartCount) {
+                cartCount.textContent = data.count;
+            }
+        })
+        .catch(error => console.error('Lỗi khi cập nhật số lượng:', error));
     }
 
     // Gọi updateCartCount khi trang tải (nếu cần)
     document.addEventListener('DOMContentLoaded', updateCartCount);
+
+    // Function to show login prompt
+    function showLoginPrompt() {
+        const loginDiv = document.createElement('div');
+        loginDiv.id = 'login-prompt';
+        loginDiv.className = 'fixed bottom-0 left-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 max-w-xs relative overflow-hidden z-50';
+        loginDiv.innerHTML = `
+            <span class="block">Vui lòng <a href="{{ route('login') }}" class="underline">đăng nhập</a> để thực hiện thao tác này!</span>
+            <div id="login-countdown" class="absolute bottom-0 left-0 h-1 bg-yellow-500 transition-all duration-500 ease-linear" style="width: 100%;"></div>
+        `;
+        document.body.insertBefore(loginDiv, document.body.firstChild);
+
+        setTimeout(() => {
+            const countdown = loginDiv.querySelector('#login-countdown');
+            let width = 100;
+            const interval = setInterval(() => {
+                width -= 1;
+                countdown.style.width = `${width}%`;
+                if (width <= 0) {
+                    clearInterval(interval);
+                    loginDiv.style.display = 'none';
+                }
+            }, 50);
+        }, 0);
+    }
 </script>

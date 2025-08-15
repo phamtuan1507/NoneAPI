@@ -22,21 +22,22 @@
 }
 
 @keyframes spin-text {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 .spin-text-slow {
-  animation: spin-text 10s linear infinite;
-  transform-origin: 64px 64px; /* tâm của SVG */
+    animation: spin-text 10s linear infinite;
+    transform-origin: 64px 64px; /* tâm của SVG */
 }
 
-#success-message {
-    position: fixed !important;
-    bottom: 1rem !important;
-    left: 1rem !important;
-}
+#success-message,
+#login-prompt,
 #error-message {
     position: fixed !important;
     bottom: 1rem !important;
-    right: 1rem !important;
+    left: 1rem !important;
 }

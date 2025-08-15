@@ -7,7 +7,6 @@
 {{-- Đặt file css cho page --}}
 @section('file', 'about')
 
-
 {{-- Đặt class cho body --}}
 @section('page', 'about')
 @section('content')
