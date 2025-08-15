@@ -44,7 +44,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="{{ route('products') }}" class="hover:text-[#7a4a2f]">SẢN PHẨM</a>
+                    <a href="{{ route('products.index') }}" class="hover:text-[#7a4a2f]">SẢN PHẨM</a>
                 </li>
                 <li>
                     <a href="{{ route('blogs') }}" class="hover:text-[#7a4a2f]">TIN TỨC</a>
@@ -67,7 +67,7 @@
             </button>
             <!-- Cart -->
             <div class="relative">
-                <a href="{{ route('cart') }}"
+                <a href="{{ route('cart.index') }}"
                     class="text-[#1a2233] hover:text-[#7a4a2f] focus:outline-none cursor-pointer">
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <circle cx="9" cy="21" r="1" stroke-width="2" />
@@ -77,8 +77,14 @@
                 </a>
                 <span
                     class="absolute -top-2 -right-2 bg-[#7a4a2f] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {{-- {{ session('cart', [])->sum('quantity') }} --}}
-                    0
+                    @php
+                        $cartCount = \App\Models\CartItem::where('user_id', auth()->id())->sum('quantity');
+                    @endphp
+                    @if ($cartCount == 0)
+                        0
+                    @elseif ($cartCount > 0)
+                        {{ $cartCount }}
+                    @endif
                 </span>
             </div>
             @auth
@@ -200,8 +206,8 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="{{ route('products') }}" class="flex items-center px-5 py-3 hover:text-[#7a4a2f]"
-                            onclick="closeMobileMenu()">
+                        <a href="{{ route('products.index') }}"
+                            class="flex items-center px-5 py-3 hover:text-[#7a4a2f]" onclick="closeMobileMenu()">
                             <span class="mr-2">&rsaquo;</span> SẢN PHẨM
                         </a>
                     </li>

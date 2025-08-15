@@ -30,3 +30,13 @@
   transform-origin: 64px 64px; /* tâm của SVG */
 }
 
+#success-message {
+    position: fixed !important;
+    bottom: 1rem !important;
+    left: 1rem !important;
+}
+#error-message {
+    position: fixed !important;
+    bottom: 1rem !important;
+    right: 1rem !important;
+}

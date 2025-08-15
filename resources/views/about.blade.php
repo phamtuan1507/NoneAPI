@@ -11,7 +11,7 @@
 {{-- Đặt class cho body --}}
 @section('page', 'about')
 @section('content')
-    <main class="font-bold text-[#fcdc39]">
-        abc
+    <main>
+
     </main>
 @endsection

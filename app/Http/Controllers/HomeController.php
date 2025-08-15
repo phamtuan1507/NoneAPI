@@ -23,10 +23,10 @@ class HomeController extends Controller
     {
         return view('appointment');
     }
-    public function products()
-    {
-        return view('products');
-    }
+    // public function products()
+    // {
+    //     return view('products');
+    // }
     public function blogs()
     {
         return view('blogs');

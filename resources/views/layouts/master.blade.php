@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
@@ -46,6 +47,19 @@
                     style="width: 100%;"></div>
             </div>
         @endif
+
+        @if (session('error'))
+            <div id="error-message"
+                class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 mx-auto max-w-7xl relative overflow-hidden">
+                <ul>
+                    <li>{{ session('error') }}</li>
+                </ul>
+                <div id="error-countdown"
+                    class="absolute bottom-0 left-0 h-1 bg-red-500 transition-all duration-300 ease-linear"
+                    style="width: 100%;"></div>
+            </div>
+        @endif
+
         @yield('content')
         @yield('scripts')
         @yield('styles')

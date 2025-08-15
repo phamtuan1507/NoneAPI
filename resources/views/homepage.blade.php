@@ -201,33 +201,7 @@
             </section>
         </section>
         <section>
-            <div class="m-[0_20px_0_-32px] relative">
-                <div class="relative flex items-center justify-center w-30 h-30 bg-[#8b5e3c] rounded-full">
-                    <svg class="w-32 h-32 p-1" viewBox="0 0 128 128">
-                        <!-- Vòng nền đứng yên -->
-                        <circle cx="64" cy="64" r="48" fill="#8b5e3c" />
 
-                        <!-- Dashed circle border for text path -->
-                        <circle cx="64" cy="64" r="32" fill="none" stroke="#fff" stroke-width="1"
-                            stroke-dasharray="5,5" />
-
-                        <!-- Mũi tên giữa đứng yên -->
-                        <text x="64" y="68" text-anchor="middle" font-size="40" fill="white"
-                            font-family="sans-serif">&rarr;</text>
-
-                        <!-- Nhóm chữ xoay -->
-                        <g id="rotating-text">
-                            <path id="circlePath" d="M64,64 m-46,0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0" fill="none"
-                                stroke="none" />
-                            <text>
-                                <textPath href="#circlePath" class="text-white text-xs font-semibold fill-current">
-                                    makeup last all day • makeup last all day •
-                                </textPath>
-                            </text>
-                        </g>
-                    </svg>
-                </div>
-            </div>
         </section>
     </main>
 @endsection
