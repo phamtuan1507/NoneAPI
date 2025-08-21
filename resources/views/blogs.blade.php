@@ -28,5 +28,27 @@
                 </div>
             </div>
         </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 py-16 container mx-auto px-4 ">
+            @foreach ($blogs as $item)
+                <div class="relative group">
+                    <a class="w-full h-200" href="{{ route('blog.detail', $item->id) }}">
+                        <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->title }}"
+                            class="w-full h-75 transition-transform duration-300 cursor-pointer group-hover:scale-105" />
+                    </a>
+                    <p class="text-[#121f38] hover:text-[#a05c3c] cursor-pointer mb-[15px] mt-[22px]">
+                        {{ $item->title }}
+                    </p>
+                    <p class="font-semibold text-lg text-[#555555] mb-[18px]">
+                        {{ $item->description }}
+                    </p>
+                    {{-- <div class="border-t border-[#a1a1a180] mt-[15px] pt-[16px]">
+                        <span>
+                            <span class="text-[#6f6c6c] hover:text-[#a05c3c] cursor-pointer">{{ $item->author }}</span> /
+                            <span class="text-[#6f6c6c] hover:text-[#a05c3c] cursor-pointer">{{ $item->createTime }}</span>
+                        </span>
+                    </div> --}}
+                </div>
+            @endforeach
+        </div>
     </main>
 @endsection

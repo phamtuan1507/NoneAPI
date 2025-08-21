@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
@@ -40,7 +41,10 @@ Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/services', [HomeController::class, 'services'])->name('services');
 Route::get('/team', [HomeController::class, 'team'])->name('team');
 Route::get('/appointment', [HomeController::class, 'appointment'])->name('appointment');
-Route::get('/blogs', [HomeController::class, 'blogs'])->name('blogs');
+Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
+// Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
+Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
+Route::get('/blogs/{id}', [BlogController::class, 'detail'])->name('blog.detail');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
 // Product routes
@@ -87,3 +91,5 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::post('/admin/upload-image', [ImageController::class, 'upload'])->name('admin.image.upload')->middleware('auth');
+
+Route::post('/blogs/{id}/comment', [BlogController::class, 'comment'])->name('blog.comment');
