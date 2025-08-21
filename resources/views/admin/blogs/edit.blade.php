@@ -25,9 +25,13 @@
                     <label for="description" class="block text-sm font-medium text-gray-700">Mô tả</label>
                     <textarea name="description" id="description" class="mt-1 block w-full border-gray-300 rounded-md">{{ old('description', $blog->description) }}</textarea>
                 </div>
-                <div class="mb-4">
+                {{-- <div class="mb-4">
                     <label for="content" class="block text-sm font-medium text-gray-700">Nội dung</label>
                     <textarea name="content" id="content" class="mt-1 block w-full border-gray-300 rounded-md">{{ old('content', $blog->content) }}</textarea>
+                </div> --}}
+                <div class="mb-4">
+                    <label for="content" class="block text-sm font-medium text-gray-700">Nội dung</label>
+                    <div id="content" class="mt-1 border border-gray-300 rounded-md p-2 min-h-[200px]">{!! $blog->content !!}</div>
                 </div>
                 <div class="mb-4">
                     <label for="image" class="block text-sm font-medium text-gray-700">Hình ảnh</label>

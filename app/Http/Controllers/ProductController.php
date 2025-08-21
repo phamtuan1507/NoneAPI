@@ -25,7 +25,7 @@ class ProductController extends Controller
     {
         try {
             // Tải sản phẩm cùng với category và additionalImages
-            $product = Product::with(['category', 'additionalImages'])->findOrFail($id);
+            $product = Product::with(['category', 'additionalImages', 'reviews'])->findOrFail($id);
 
             // Xác định ảnh chính, sử dụng fallback nếu không có
             $mainImage = $product->image ?? 'https://via.placeholder.com/400';
