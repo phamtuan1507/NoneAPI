@@ -11,6 +11,23 @@
 @section('page', 'checkout')
 @section('content')
     <main>
+        <div
+            class="bg-[url(/public/images/breadcumb.jpg)] pb-[0.1px] overflow-hidden relative bg-[#EFF1F5] bg-[length:100%_auto] bg-top bg-no-repeat bg-cover">
+            <div class="relative z-[3] container mx-auto px-4 md:px-6 lg:px-8">
+                <div class="p-[200px_0_200px_0]">
+                    <h1 class="text-[#121f38] text-[60px] uppercase m-[-0.22em_0_-0.22em_0]">
+                        Thanh toán
+                    </h1>
+                    <nav class="">
+                        <a href="/" class="text-[14px] text-[#555555] hover:text-[#a05c3c]">
+                            Trang chủ
+                        </a>
+                        <span class="mx-1">&#8250;</span>
+                        <span class="text-[14px] text-[#121f38]"> Thanh toán </span>
+                    </nav>
+                </div>
+            </div>
+        </div>
         <div class="container px-4 mx-auto lg:px-8 md:px-6 pt-[120px] pb-[90px]">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
@@ -22,8 +39,9 @@
                         <!-- Họ và Tên -->
                         <div class="flex flex-col gap-4 md:flex-row">
                             <div class="w-full md:w-1/2">
-                                <input type="text" name="ho" value="{{ old('ho', auth()->user()->last_name ?? '') }}"
-                                    placeholder="Họ" class="w-full p-2 border border-[#e7e5e5] rounded" required>
+                                <input type="text" name="ho"
+                                    value="{{ old('ho', auth()->user()->last_name ?? '') }}" placeholder="Họ"
+                                    class="w-full p-2 border border-[#e7e5e5] rounded" required>
                                 @error('ho')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror

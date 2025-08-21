@@ -11,6 +11,23 @@
 @section('page', 'products')
 @section('content')
     <main>
+        <div
+            class="bg-[url(/public/images/breadcumb.jpg)] pb-[0.1px] overflow-hidden relative bg-[#EFF1F5] bg-[length:100%_auto] bg-top bg-no-repeat bg-cover">
+            <div class="relative z-[3] container mx-auto px-4 md:px-6 lg:px-8">
+                <div class="p-[200px_0_200px_0]">
+                    <h1 class="text-[#121f38] text-[60px] uppercase m-[-0.22em_0_-0.22em_0]">
+                        Sản phẩm
+                    </h1>
+                    <nav class="">
+                        <a href="/" class="text-[14px] text-[#555555] hover:text-[#a05c3c]">
+                            Trang chủ
+                        </a>
+                        <span class="mx-1">&#8250;</span>
+                        <span class="text-[14px] text-[#121f38]"> Sản phẩm </span>
+                    </nav>
+                </div>
+            </div>
+        </div>
         <div class="container px-4 mx-auto lg:px-8 md:px-6 pt-[120px] pb-[90px]">
             <div class="flex justify-between items-center mb-[40px]">
                 <span>
@@ -104,110 +121,111 @@
 <script>
     function addToCart(productId) {
         fetch('/check-auth', { // Kiểm tra trạng thái đăng nhập
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                'Accept': 'application/json',
-            }
-        })
-        .then(response => response.json())
-        .then(authData => {
-            console.log('Auth data:', authData); // Kiểm tra giá trị authData
-            if (!authData.authenticated) {
-                showLoginPrompt();
-                return;
-            }
-
-            fetch('{{ route('cart.add', ['productId' => ':id']) }}'.replace(':id', productId), {
-                method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Content-Type': 'application/json',
                     'Accept': 'application/json',
-                },
-                body: JSON.stringify({
-                    quantity: 1
-                })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Yêu cầu không thành công: ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    const successDiv = document.createElement('div');
-                    successDiv.id = 'success-message';
-                    successDiv.className =
-                        'bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 mx-auto max-w-7xl relative overflow-hidden';
-                    successDiv.innerHTML =
-                        `<span class="block">${data.message}</span><div id="success-countdown" class="absolute bottom-0 left-0 h-1 bg-green-500 transition-all duration-500 ease-linear" style="width: 100%;"></div>`;
-                    document.body.insertBefore(successDiv, document.body.firstChild);
-
-                    const cartCount = document.getElementById('cart-count');
-                    if (cartCount) {
-                        cartCount.textContent = data.count;
-                    }
-
-                    setTimeout(() => {
-                        const countdown = successDiv.querySelector('#success-countdown');
-                        let width = 100;
-                        const interval = setInterval(() => {
-                            width -= 1;
-                            countdown.style.width = `${width}%`;
-                            if (width <= 0) {
-                                clearInterval(interval);
-                                successDiv.style.display = 'none';
-                            }
-                        }, 50);
-                    }, 0);
-                } else {
-                    const errorDiv = document.createElement('div');
-                    errorDiv.id = 'error-message';
-                    errorDiv.className =
-                        'bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 mx-auto max-w-7xl relative overflow-hidden';
-                    errorDiv.innerHTML =
-                        `<ul><li>${data.message}</li></ul><div id="error-countdown" class="absolute bottom-0 left-0 h-1 bg-red-500 transition-all duration-300 ease-linear" style="width: 100%;"></div>`;
-                    document.body.insertBefore(errorDiv, document.body.firstChild);
-
-                    setTimeout(() => {
-                        const countdown = errorDiv.querySelector('#error-countdown');
-                        let width = 100;
-                        const interval = setInterval(() => {
-                            width -= 1;
-                            countdown.style.width = `${width}%`;
-                            if (width <= 0) {
-                                clearInterval(interval);
-                                errorDiv.style.display = 'none';
-                            }
-                        }, 30);
-                    }, 0);
                 }
             })
-            .catch(error => {
-                console.error('Lỗi:', error);
-                alert('Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng. Chi tiết: ' + error.message);
-            });
-        })
-        .catch(error => console.error('Lỗi kiểm tra đăng nhập:', error));
+            .then(response => response.json())
+            .then(authData => {
+                console.log('Auth data:', authData); // Kiểm tra giá trị authData
+                if (!authData.authenticated) {
+                    showLoginPrompt();
+                    return;
+                }
+
+                fetch('{{ route('cart.add', ['productId' => ':id']) }}'.replace(':id', productId), {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                'content'),
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            quantity: 1
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Yêu cầu không thành công: ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            const successDiv = document.createElement('div');
+                            successDiv.id = 'success-message';
+                            successDiv.className =
+                                'bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 mx-auto max-w-7xl relative overflow-hidden';
+                            successDiv.innerHTML =
+                                `<span class="block">${data.message}</span><div id="success-countdown" class="absolute bottom-0 left-0 h-1 bg-green-500 transition-all duration-500 ease-linear" style="width: 100%;"></div>`;
+                            document.body.insertBefore(successDiv, document.body.firstChild);
+
+                            const cartCount = document.getElementById('cart-count');
+                            if (cartCount) {
+                                cartCount.textContent = data.count;
+                            }
+
+                            setTimeout(() => {
+                                const countdown = successDiv.querySelector('#success-countdown');
+                                let width = 100;
+                                const interval = setInterval(() => {
+                                    width -= 1;
+                                    countdown.style.width = `${width}%`;
+                                    if (width <= 0) {
+                                        clearInterval(interval);
+                                        successDiv.style.display = 'none';
+                                    }
+                                }, 50);
+                            }, 0);
+                        } else {
+                            const errorDiv = document.createElement('div');
+                            errorDiv.id = 'error-message';
+                            errorDiv.className =
+                                'bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 mx-auto max-w-7xl relative overflow-hidden';
+                            errorDiv.innerHTML =
+                                `<ul><li>${data.message}</li></ul><div id="error-countdown" class="absolute bottom-0 left-0 h-1 bg-red-500 transition-all duration-300 ease-linear" style="width: 100%;"></div>`;
+                            document.body.insertBefore(errorDiv, document.body.firstChild);
+
+                            setTimeout(() => {
+                                const countdown = errorDiv.querySelector('#error-countdown');
+                                let width = 100;
+                                const interval = setInterval(() => {
+                                    width -= 1;
+                                    countdown.style.width = `${width}%`;
+                                    if (width <= 0) {
+                                        clearInterval(interval);
+                                        errorDiv.style.display = 'none';
+                                    }
+                                }, 30);
+                            }, 0);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Lỗi:', error);
+                        alert('Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng. Chi tiết: ' + error.message);
+                    });
+            })
+            .catch(error => console.error('Lỗi kiểm tra đăng nhập:', error));
     }
 
     // Hàm cập nhật số lượng giỏ hàng trên header
     function updateCartCount() {
         fetch('/cart/count', {
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                'Accept': 'application/json',
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            const cartCount = document.getElementById('cart-count');
-            if (cartCount) {
-                cartCount.textContent = data.count;
-            }
-        })
-        .catch(error => console.error('Lỗi khi cập nhật số lượng:', error));
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const cartCount = document.getElementById('cart-count');
+                if (cartCount) {
+                    cartCount.textContent = data.count;
+                }
+            })
+            .catch(error => console.error('Lỗi khi cập nhật số lượng:', error));
     }
 
     // Gọi updateCartCount khi trang tải (nếu cần)
@@ -217,7 +235,8 @@
     function showLoginPrompt() {
         const loginDiv = document.createElement('div');
         loginDiv.id = 'login-prompt';
-        loginDiv.className = 'fixed bottom-0 left-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 max-w-xs relative overflow-hidden z-50';
+        loginDiv.className =
+            'fixed bottom-0 left-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 max-w-xs relative overflow-hidden z-50';
         loginDiv.innerHTML = `
             <span class="block">Vui lòng <a href="{{ route('login') }}" class="underline">đăng nhập</a> để thực hiện thao tác này!</span>
             <div id="login-countdown" class="absolute bottom-0 left-0 h-1 bg-yellow-500 transition-all duration-500 ease-linear" style="width: 100%;"></div>
