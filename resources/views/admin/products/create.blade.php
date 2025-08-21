@@ -34,9 +34,12 @@
                     <input type="file" name="image" id="image" class="mt-1 block w-full">
                 </div>
                 <div class="mb-4">
-                    <label for="additional_images" class="block text-sm font-medium text-gray-700">Hình ảnh phụ</label>
+                    <label for="additional_images" class="block text-sm font-medium text-gray-700">Hình ảnh phụ (chọn nhiều
+                        ảnh, tối đa 5)</label>
                     <input type="file" name="additional_images[]" id="additional_images" multiple
-                        class="mt-1 block w-full">
+                        class="mt-1 block w-full" onchange="previewImages(event)" accept="image/*">
+                    <div id="image-preview" class="flex gap-2 mt-2 flex-wrap"></div>
+                    <small class="text-gray-500">* Nhấn vào ảnh để xóa khỏi preview.</small>
                 </div>
                 <div class="mb-4">
                     <label for="category_id" class="block text-sm font-medium text-gray-700">Danh mục</label>
@@ -64,3 +67,44 @@
         </div>
     </main>
 @endsection
+<script>
+    function previewImages(event) {
+        const preview = document.getElementById('image-preview');
+        const files = event.target.files;
+        const maxImages = 5; // Giới hạn tối đa 5 ảnh
+        let currentImages = preview.children.length;
+
+        for (let i = 0; i < files.length && currentImages + i < maxImages; i++) {
+            const file = files[i];
+            if (!file.type.startsWith('image/')) continue; // Chỉ chấp nhận file ảnh
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgContainer = document.createElement('div');
+                imgContainer.className = 'relative';
+
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'w-16 h-16 object-cover border rounded';
+                imgContainer.appendChild(img);
+
+                const removeBtn = document.createElement('button');
+                removeBtn.className =
+                    'absolute top-0 right-0 bg-red-500 text-white w-4 h-4 rounded-full text-xs flex items-center justify-center -mt-2 -mr-2';
+                removeBtn.innerHTML = '×';
+                removeBtn.onclick = function() {
+                    imgContainer.remove();
+                };
+                imgContainer.appendChild(removeBtn);
+
+                preview.appendChild(imgContainer);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Nếu vượt quá giới hạn, thông báo
+        if (files.length + currentImages > maxImages) {
+            alert(`Chỉ được upload tối đa ${maxImages} ảnh. Vui lòng xóa một số ảnh trước khi thêm mới.`);
+        }
+    }
+</script>

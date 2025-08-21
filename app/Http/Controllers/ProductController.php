@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -22,12 +23,29 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $product       = Product::with(['category', 'additionalImages'])->find($id);
-        $mainImage     = $product->image ?? 'https://via.placeholder.com/400';
-        $productImages = $product->additionalImages->pluck('image')->toArray();
-        if (! in_array($mainImage, $productImages)) {
-            $productImages[] = $mainImage; // Add main image if not already included
+        try {
+            // Tải sản phẩm cùng với category và additionalImages
+            $product = Product::with(['category', 'additionalImages'])->findOrFail($id);
+
+            // Xác định ảnh chính, sử dụng fallback nếu không có
+            $mainImage = $product->image ?? 'https://via.placeholder.com/400';
+
+            // Lấy tất cả ảnh phụ từ additionalImages và thêm ảnh chính vào đầu mảng
+            $productImages = $product->additionalImages->pluck('image')->toArray();
+            if (! in_array($mainImage, $productImages)) {
+                array_unshift($productImages, $mainImage); // Thêm ảnh chính vào đầu mảng
+            }
+
+            // Kiểm tra số lượng ảnh, đảm bảo có ít nhất 1 ảnh
+            if (empty($productImages)) {
+                $productImages = [$mainImage]; // Fallback nếu không có ảnh
+            }
+
+            // Truyền dữ liệu vào view
+            return view('product-detail', compact('product', 'mainImage', 'productImages'));
+        } catch (ModelNotFoundException $e) {
+            // Trả về view với $product = null nếu không tìm thấy sản phẩm
+            return view('product-detail')->with('product', null);
         }
-        return view('product-detail', compact('product','mainImage','productImages'));
     }
 }

@@ -58,15 +58,17 @@
                                         <button onclick="updateCartQuantity('{{ $item->id }}', 'decrease')"
                                             class="flex items-center justify-center w-10 h-10 border border-[#e7e5e5] bg-transparent hover:bg-[#9a563a] hover:text-white duration-300 cursor-pointer">-</button>
                                         <input type="number" class="quantity-input w-16 h-10 text-center border"
-                                            value="{{ $item->quantity }}" max="{{ $item->product->quantity }}" min="1"
-                                            data-cart-item-id="{{ $item->id }}">
+                                            value="{{ $item->quantity }}" max="{{ $item->product->quantity }}"
+                                            min="1" data-cart-item-id="{{ $item->id }}">
                                         <button onclick="updateCartQuantity('{{ $item->id }}', 'increase')"
                                             class="flex items-center justify-center w-10 h-10 border border-[#e7e5e5] bg-transparent hover:bg-[#9a563a] hover:text-white duration-300 cursor-pointer">+</button>
                                     </div>
                                 </td>
-                                <td class="p-2 total-price" data-cart-item-id="{{ $item->id }}">{{ number_format($item->product->price * $item->quantity) }}đ</td>
+                                <td class="p-2 total-price" data-cart-item-id="{{ $item->id }}">
+                                    {{ number_format($item->product->price * $item->quantity) }}đ</td>
                                 <td class="p-2">
-                                    <button onclick="removeFromCart('{{ $item->id }}')" class="text-red-500 hover:text-red-700">
+                                    <button onclick="removeFromCart('{{ $item->id }}')"
+                                        class="text-red-500 hover:text-red-700">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -136,191 +138,199 @@
             @endif
         </div>
     </main>
-@endsection
-<script>
-    // Function to update cart quantity using AJAX
-    function updateCartQuantity(cartItemId, action) {
-        const quantityInput = document.querySelector(`.quantity-input[data-cart-item-id="${cartItemId}"]`);
-        let quantity = parseInt(quantityInput.value);
-        const maxQuantity = parseInt(quantityInput.getAttribute('max'));
+    <script>
+        // Function to update cart quantity using AJAX
+        function updateCartQuantity(cartItemId, action) {
+            const quantityInput = document.querySelector(`.quantity-input[data-cart-item-id="${cartItemId}"]`);
+            let quantity = parseInt(quantityInput.value);
+            const maxQuantity = parseInt(quantityInput.getAttribute('max'));
 
-        if (action === 'decrease' && quantity > 1) {
-            quantity -= 1;
-        } else if (action === 'increase' && quantity < maxQuantity) {
-            quantity += 1;
-        } else {
-            alert(`Số lượng tối đa trong kho là ${maxQuantity} cho sản phẩm này!`);
-            return;
-        }
-
-        fetch(`{{ route('cart.update', ':id') }}`.replace(':id', cartItemId), {
-            method: 'PATCH',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ action: action, quantity: quantity })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Yêu cầu không thành công: ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.success) {
-                // Update quantity in input
-                quantityInput.value = quantity;
-
-                // Update total price for this item
-                const unitPrice = parseFloat(data.product_price.replace(/[^0-9.-]+/g, ''));
-                const totalPriceElement = document.querySelector(`.total-price[data-cart-item-id="${cartItemId}"]`);
-                totalPriceElement.textContent = numberFormat(unitPrice * quantity) + 'đ';
-
-                // Update total amount
-                const totalAmountElements = document.querySelectorAll('.total-amount');
-                totalAmountElements.forEach(el => {
-                    el.textContent = numberFormat(data.total) + 'đ';
-                });
-
-                // Update cart count in header
-                const cartCount = document.getElementById('cart-count');
-                if (cartCount) {
-                    cartCount.textContent = data.cart_count || 0;
-                }
-
-                // Show success message
-                const successDiv = document.createElement('div');
-                successDiv.id = 'success-message';
-                successDiv.className = 'fixed top-4 left-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 max-w-xs relative overflow-hidden z-50';
-                successDiv.innerHTML = `<span class="block">${data.message}</span><div id="success-countdown" class="absolute bottom-0 left-0 h-1 bg-green-500 transition-all duration-500 ease-linear" style="width: 100%;"></div>`;
-                document.body.insertBefore(successDiv, document.body.firstChild);
-
-                setTimeout(() => {
-                    const countdown = successDiv.querySelector('#success-countdown');
-                    let width = 100;
-                    const interval = setInterval(() => {
-                        width -= 1;
-                        countdown.style.width = `${width}%`;
-                        if (width <= 0) {
-                            clearInterval(interval);
-                            successDiv.style.display = 'none';
-                        }
-                    }, 50);
-                }, 0);
+            if (action === 'decrease' && quantity > 1) {
+                quantity -= 1;
+            } else if (action === 'increase' && quantity < maxQuantity) {
+                quantity += 1;
             } else {
-                alert(data.message || 'Có lỗi khi cập nhật số lượng.');
+                alert(`Số lượng tối đa trong kho là ${maxQuantity} cho sản phẩm này!`);
+                return;
             }
-        })
-        .catch(error => {
-            console.error('Lỗi:', error);
-            alert('Đã xảy ra lỗi khi cập nhật số lượng. Vui lòng thử lại.');
-        });
-    }
 
-    // Function to remove item from cart using AJAX
-    function removeFromCart(cartItemId) {
-        if (confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?')) {
-            fetch(`{{ route('cart.remove', ':id') }}`.replace(':id', cartItemId), {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Yêu cầu không thành công: ' + response.statusText);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    // Remove the row from the table
-                    const row = document.querySelector(`tr[data-cart-item-id="${cartItemId}"]`);
-                    if (row) row.remove();
-
-                    // Update total amount
-                    const totalAmountElements = document.querySelectorAll('.total-amount');
-                    totalAmountElements.forEach(el => {
-                        el.textContent = numberFormat(data.total) + 'đ';
-                    });
-
-                    // Update cart count in header
-                    const cartCount = document.getElementById('cart-count');
-                    if (cartCount) {
-                        cartCount.textContent = data.cart_count || 0;
+            fetch(`{{ route('cart.update', ':id') }}`.replace(':id', cartItemId), {
+                    method: 'PATCH',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: action,
+                        quantity: quantity
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Yêu cầu không thành công: ' + response.statusText);
                     }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Update quantity in input
+                        quantityInput.value = quantity;
 
-                    // Check if cart is empty and show empty message
-                    if (document.querySelectorAll('tbody tr').length === 0) {
-                        const emptyDiv = document.createElement('div');
-                        emptyDiv.className = 'text-center';
-                        emptyDiv.innerHTML = `
-                            <h2 class="text-[30px] font-bold text-[#121f38] mb-4">Giỏ hàng của bạn đang trống</h2>
-                            <p class="mb-6 text-gray-600">Hãy thêm sản phẩm để tiếp tục mua sắm!</p>
-                            <a href="{{ route('products.index') }}"
-                                class="relative inline-block px-[23px] py-[10px] text-sm font-bold uppercase tracking-wider text-white bg-[#a05c3c] border-none rounded-none overflow-hidden text-center group cursor-pointer">
-                                TIẾP TỤC MUA HÀNG
-                                <span class="absolute bottom-0 left-0 w-1/2 h-0 bg-[#131e35] z-[-1] transition-all duration-400 ease-[cubic-bezier(0.77,0,0.18,1)] group-hover:h-full group-focus:h-full"></span>
-                                <span class="absolute top-0 right-0 w-1/2 h-0 bg-[#131e35] z-[-1] transition-all duration-400 ease-[cubic-bezier(0.77,0,0.18,1)] group-hover:h-full group-focus:h-full"></span>
-                            </a>
-                        `;
-                        document.querySelector('table').style.display = 'none';
-                        document.querySelector('.container').insertBefore(emptyDiv, document.querySelector('table'));
+                        // Update total price for this item
+                        const unitPrice = parseFloat(data.product_price.replace(/[^0-9.-]+/g, ''));
+                        const totalPriceElement = document.querySelector(
+                            `.total-price[data-cart-item-id="${cartItemId}"]`);
+                        totalPriceElement.textContent = numberFormat(unitPrice * quantity) + 'đ';
+
+                        // Update total amount
+                        const totalAmountElements = document.querySelectorAll('.total-amount');
+                        totalAmountElements.forEach(el => {
+                            el.textContent = numberFormat(data.total) + 'đ';
+                        });
+
+                        // Update cart count in header
+                        const cartCount = document.getElementById('cart-count');
+                        if (cartCount) {
+                            cartCount.textContent = data.cart_count || 0;
+                        }
+
+                        // Show success message
+                        const existingSuccess = document.getElementById('success-message');
+                        if (existingSuccess) existingSuccess.remove(); // Xóa thông báo cũ
+
+                        const successDiv = document.createElement('div');
+                        successDiv.id = 'success-message';
+                        successDiv.className =
+                            'bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 relative overflow-hidden'; // Loại bỏ fixed, right, top, left
+                        successDiv.style.maxWidth = '300px'; // Ghi đè trực tiếp
+                        successDiv.innerHTML =
+                            `<span class="block">${data.message}</span><div id="success-countdown" class="absolute bottom-0 left-0 h-1 bg-green-500 transition-all duration-500 ease-linear" style="width: 100%;"></div>`;
+                        document.body.insertBefore(successDiv, document.body.firstChild);
+
+                        setTimeout(() => {
+                            const countdown = successDiv.querySelector('#success-countdown');
+                            let width = 100;
+                            const interval = setInterval(() => {
+                                width -= 1;
+                                countdown.style.width = `${width}%`;
+                                if (width <= 0) {
+                                    clearInterval(interval);
+                                    successDiv.style.display = 'none';
+                                }
+                            }, 50);
+                        }, 0);
+                    } else {
+                        alert(data.message || 'Có lỗi khi cập nhật số lượng.');
                     }
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    alert('Đã xảy ra lỗi khi cập nhật số lượng. Vui lòng thử lại.');
+                });
+        }
 
-                    // Show success message
-                    const successDiv = document.createElement('div');
-                    successDiv.id = 'success-message';
-                    successDiv.className = 'fixed top-4 left-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 max-w-xs relative overflow-hidden z-50';
-                    successDiv.innerHTML = `<span class="block">${data.message}</span><div id="success-countdown" class="absolute bottom-0 left-0 h-1 bg-green-500 transition-all duration-500 ease-linear" style="width: 100%;"></div>`;
-                    document.body.insertBefore(successDiv, document.body.firstChild);
+        // Function to remove item from cart using AJAX
+        function removeFromCart(cartItemId) {
+            if (confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?')) {
+                fetch(`{{ route('cart.remove', ':id') }}`.replace(':id', cartItemId), {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Yêu cầu không thành công: ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            const existingSuccess = document.getElementById('success-message');
+                            if (existingSuccess) existingSuccess.remove(); // Xóa thông báo cũ
 
-                    setTimeout(() => {
-                        const countdown = successDiv.querySelector('#success-countdown');
-                        let width = 100;
-                        const interval = setInterval(() => {
-                            width -= 1;
-                            countdown.style.width = `${width}%`;
-                            if (width <= 0) {
-                                clearInterval(interval);
-                                successDiv.style.display = 'none';
+                            // Remove the row from the table
+                            const row = document.querySelector(`tr[data-cart-item-id="${cartItemId}"]`);
+                            if (row) row.remove();
+
+                            // Update total amount
+                            const totalAmountElements = document.querySelectorAll('.total-amount');
+                            totalAmountElements.forEach(el => {
+                                el.textContent = numberFormat(data.total) + 'đ';
+                            });
+
+                            // Update cart count in header
+                            const cartCount = document.getElementById('cart-count');
+                            if (cartCount) {
+                                cartCount.textContent = data.cart_count || 0;
                             }
-                        }, 50);
-                    }, 0);
-                } else {
-                    alert(data.message || 'Có lỗi khi xóa sản phẩm.');
-                }
-            })
-            .catch(error => {
-                console.error('Lỗi:', error);
-                alert('Đã xảy ra lỗi khi xóa sản phẩm. Vui lòng thử lại.');
-            });
-        }
-    }
 
-    // Function to format number with Vietnamese style
-    function numberFormat(number) {
-        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    }
+                            // Check if cart is empty and show empty message
+                            if (document.querySelectorAll('tbody tr').length === 0) {
+                                const emptyDiv = document.createElement('div');
+                                emptyDiv.className = 'text-center';
+                                emptyDiv.innerHTML = `...`; // Giữ nguyên HTML cũ
+                                document.querySelector('table').style.display = 'none';
+                                document.querySelector('.container').insertBefore(emptyDiv, document.querySelector(
+                                    'table'));
+                            }
 
-    // Auto-dismiss success message from session (if any)
-    setTimeout(() => {
-        const successMessage = document.getElementById('success-message');
-        if (successMessage) {
-            const countdown = document.getElementById('success-countdown');
-            let width = 100;
-            const interval = setInterval(() => {
-                width -= 1;
-                countdown.style.width = `${width}%`;
-                if (width <= 0) {
-                    clearInterval(interval);
-                    successMessage.style.display = 'none';
-                }
-            }, 50);
+                            // Show success message
+                            const successDiv = document.createElement('div');
+                            successDiv.id = 'success-message';
+                            successDiv.className =
+                                'bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 relative overflow-hidden';
+                            successDiv.style.maxWidth = '300px';
+                            successDiv.innerHTML =
+                                `<span class="block">${data.message}</span><div id="success-countdown" class="absolute bottom-0 left-0 h-1 bg-green-500 transition-all duration-500 ease-linear" style="width: 100%;"></div>`;
+                            document.body.insertBefore(successDiv, document.body.firstChild);
+
+                            setTimeout(() => {
+                                const countdown = successDiv.querySelector('#success-countdown');
+                                let width = 100;
+                                const interval = setInterval(() => {
+                                    width -= 1;
+                                    countdown.style.width = `${width}%`;
+                                    if (width <= 0) {
+                                        clearInterval(interval);
+                                        successDiv.style.display = 'none';
+                                    }
+                                }, 50);
+                            }, 0);
+                        } else {
+                            alert(data.message || 'Có lỗi khi xóa sản phẩm.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Lỗi:', error);
+                        alert('Đã xảy ra lỗi khi xóa sản phẩm. Vui lòng thử lại.');
+                    });
+            }
         }
-    }, 0);
-</script>
+
+        // Function to format number with Vietnamese style
+        function numberFormat(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        // Auto-dismiss success message from session (if any)
+        setTimeout(() => {
+            const successMessage = document.getElementById('success-message');
+            if (successMessage) {
+                const countdown = document.getElementById('success-countdown');
+                let width = 100;
+                const interval = setInterval(() => {
+                    width -= 1;
+                    countdown.style.width = `${width}%`;
+                    if (width <= 0) {
+                        clearInterval(interval);
+                        successMessage.style.display = 'none';
+                    }
+                }, 50);
+            }
+        }, 0);
+    </script>
+@endsection

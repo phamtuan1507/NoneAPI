@@ -1,4 +1,4 @@
-{{-- Tất các các page cần extends từ master.blade.php --}}
+{{-- Tất cả các page cần extends từ master.blade.php --}}
 @extends('layouts.master')
 
 {{-- Đặt title cho page --}}
@@ -6,7 +6,6 @@
 
 {{-- Đặt file css cho page --}}
 @section('file', 'checkout')
-
 
 {{-- Đặt class cho body --}}
 @section('page', 'checkout')
@@ -74,8 +73,7 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:none block w-full ps-[20px] py-3 pe-[30px]"
                                 required>
                                 <option value="Vietnam" {{ old('quocGia', 'Vietnam') === 'Vietnam' ? 'selected' : '' }}>
-                                    Việt
-                                    Nam</option>
+                                    Việt Nam</option>
                                 <option value="US" {{ old('quocGia') === 'US' ? 'selected' : '' }}>United States
                                 </option>
                                 <option value="CA" {{ old('quocGia') === 'CA' ? 'selected' : '' }}>Canada</option>
@@ -190,49 +188,15 @@
                     </tbody>
                 </table>
 
-                <!-- Payment Methods -->
+                <!-- Payment Method (VNPay only) -->
                 <div class="p-4">
-                    <label class="flex items-center gap-2">
-                        <input type="checkbox" name="paymentMethod[]" value="bank"
-                            {{ in_array('bank', old('paymentMethod', [])) ? 'checked' : '' }}
-                            class="form-checkbox text-amber-700">
-                        <span>Chuyển khoản ngân hàng</span>
-                    </label>
-                    <p class="mt-2 text-sm text-gray-600"
-                        {{ in_array('bank', old('paymentMethod', [])) ? '' : 'hidden' }}>
-                        Thực hiện thanh toán trực tiếp vào tài khoản ngân hàng của chúng tôi. Vui lòng sử dụng ID đơn hàng
-                        của
-                        bạn làm tài liệu tham khảo thanh toán. Đơn đặt hàng của bạn sẽ không được vận chuyển cho đến khi
-                        tiền đã
-                        được xóa trong tài khoản của chúng tôi.
-                    </p>
-                    <label class="flex items-center gap-2 mt-4">
-                        <input type="checkbox" name="paymentMethod[]" value="cash"
-                            {{ in_array('cash', old('paymentMethod', [])) ? 'checked' : '' }}
-                            class="form-checkbox text-amber-700">
-                        <span>Thanh toán khi nhận hàng</span>
-                    </label>
-                    <p class="mt-2 text-sm text-gray-600"
-                        {{ in_array('cash', old('paymentMethod', [])) ? '' : 'hidden' }}>
-                        Thanh toán bằng tiền mặt khi nhận hàng.
-                    </p>
-                    @error('paymentMethod')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Notes and Privacy -->
-                <div class="mt-4 text-sm text-gray-600">
-                    Dữ liệu cá nhân của bạn sẽ được sử dụng để xử lý đơn hàng, hỗ trợ trải nghiệm của bạn trên trang web này
-                    và
-                    cho các mục đích khác được mô tả trong
-                    <span class="text-amber-700">Chính sách bảo mật</span>.
+                    <p class="text-sm text-gray-600">Thanh toán qua VNPay.</p>
                 </div>
 
                 <!-- Submit Button -->
                 <button type="submit"
                     class="relative mt-[24px] z-[1] inline-block px-[23px] py-[10px] text-sm font-bold uppercase tracking-wider text-white bg-[#a05c3c] border-none rounded-none overflow-hidden text-center group cursor-pointer">
-                    ĐẶT HÀNG
+                    THANH TOÁN QUA VNPAY
                     <span
                         class="absolute bottom-0 left-0 w-1/2 h-0 bg-[#131e35] z-[-1] transition-all duration-400 ease-[cubic-bezier(0.77,0,0.18,1)] group-hover:h-full group-focus:h-full"></span>
                     <span

@@ -89,22 +89,28 @@
             </div>
             @auth
                 <div class="relative hidden md:block">
-                    <button id="user-menu-button"
-                        class="cursor-pointer hover:text-[#7a4a2f] flex items-center focus:outline-none"
-                        onclick="toggleUserMenu()">
-                        {{ auth()->user()->name }}
-                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
+                    <div class="flex gap-2 items-center">
+                        <div>
+                            <img src="{{ auth()->user()->image ? asset('storage/' . auth()->user()->image) : 'https://via.placeholder.com/150' }}"
+                                alt="Avatar" class="w-10 h-10 rounded-full object-cover">
+                        </div>
+                        <button id="user-menu-button"
+                            class="cursor-pointer hover:text-[#7a4a2f] flex items-center focus:outline-none"
+                            onclick="toggleUserMenu()">
+                            {{ auth()->user()->name }}
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                    </div>
                     <div id="user-menu" class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md hidden z-20">
-                        <a href="{{ route(auth()->user()->role === 'admin' ? 'admin.dashboard' : 'home') }}"
+                        <a href="{{ route(auth()->user()->role === 'admin' ? 'admin.dashboard' : 'profile') }}"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-[#7a4a2f]">Trang cá
                             nhân</a>
-                        <a href="#"
+                        <a href="{{ route('change-password') }}"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-[#7a4a2f]">Đổi mật
                             khẩu</a>
-                        <a href="#"
+                        <a href="{{ route('change-avatar') }}"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-[#7a4a2f]">Đổi ảnh đại
                             diện</a>
                         <form action="{{ route('logout') }}" method="POST" class="block w-full text-left">
@@ -126,7 +132,7 @@
                     </button>
                 </a>
             @endauth
-            <div class="hidden md:inline-block">
+            {{-- <div class="hidden md:inline-block">
                 <a href="{{ route('contact') }}">
                     <button
                         class="relative z-[1] inline-block px-[23px] py-[10px] text-sm font-bold uppercase tracking-wider text-white bg-[#a05c3c] border-none rounded-none overflow-hidden text-center group cursor-pointer">
@@ -137,7 +143,7 @@
                             class="absolute top-0 right-0 w-1/2 h-0 bg-[#131e35] z-[-1] transition-all duration-400 ease-[cubic-bezier(0.77,0,0.18,1)] group-hover:h-full group-focus:h-full"></span>
                     </button>
                 </a>
-            </div>
+            </div> --}}
             <!-- Hamburger menu -->
             <button class="md:hidden text-white bg-[#7a4a2f] p-2 focus:outline-none rounded"
                 onclick="openMobileMenu()">

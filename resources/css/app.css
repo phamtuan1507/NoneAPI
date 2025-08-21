@@ -11,16 +11,6 @@
         "Noto Color Emoji";
 }
 
-#success-message,
-#error-message {
-    transition: opacity 0.5s ease-in-out;
-}
-
-#success-message.opacity-0,
-#error-message.opacity-0 {
-    opacity: 0;
-}
-
 @keyframes spin-text {
     from {
         transform: rotate(0deg);
@@ -40,4 +30,21 @@
     position: fixed !important;
     bottom: 1rem !important;
     left: 1rem !important;
+    max-width: 300px !important;
+    padding: 1rem !important;
+    background-color: #f0fff4 !important;
+    border-left: 4px solid #38a169 !important;
+    border-radius: 4px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    z-index: 100 !important; /* Tăng z-index để khớp với HTML */
+    transition: opacity 0.5s ease-in-out !important;
+}
+
+#success-message.opacity-0,
+#error-message.opacity-0 {
+    opacity: 0 !important;
+}
+#success-message,
+#error-message {
+    transition: opacity 0.5s ease-in-out;
 }

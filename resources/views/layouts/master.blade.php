@@ -26,7 +26,8 @@
         @show
         @if (session('success'))
             <div id="success-message"
-                class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 mx-auto max-w-7xl relative overflow-hidden z-100">
+                class="fixed bottom-4 left-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 relative overflow-hidden z-100"
+                style="max-width: 300px;">
                 <span class="block">{{ session('success') }}</span>
                 <div id="success-countdown"
                     class="absolute bottom-0 left-0 h-1 bg-green-500 transition-all duration-500 ease-linear"
@@ -34,25 +35,17 @@
             </div>
         @endif
 
-        @if ($errors->any())
+        @if ($errors->any() || session('error'))
             <div id="error-message"
-                class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 mx-auto max-w-7xl relative overflow-hidden z-100">
+                class="fixed bottom-4 left-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 relative overflow-hidden z-100"
+                style="max-width: 300px;">
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
-                </ul>
-                <div id="error-countdown"
-                    class="absolute bottom-0 left-0 h-1 bg-red-500 transition-all duration-300 ease-linear"
-                    style="width: 100%;"></div>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div id="error-message"
-                class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 mx-auto max-w-7xl relative overflow-hidden z-100">
-                <ul>
-                    <li>{{ session('error') }}</li>
+                    @if (session('error'))
+                        <li>{{ session('error') }}</li>
+                    @endif
                 </ul>
                 <div id="error-countdown"
                     class="absolute bottom-0 left-0 h-1 bg-red-500 transition-all duration-300 ease-linear"
@@ -78,17 +71,16 @@
             const successCountdown = document.getElementById('success-countdown');
             let successWidth = 100;
             const successInterval = setInterval(() => {
-                successWidth -= 100 / 50; // 5 seconds = 5000ms, 100 / (5000 / 100) = 2% per 100ms
+                successWidth -= 100 / 50;
                 successCountdown.style.width = `${successWidth}%`;
                 if (successWidth <= 0) {
                     clearInterval(successInterval);
                     successMessage.classList.add('opacity-0');
-                    setTimeout(() => successMessage.style.display = 'none',
-                        500); // Match transition duration
+                    setTimeout(() => successMessage.style.display = 'none', 500);
                 }
             }, 100);
-            setTimeout(() => successMessage.classList.add('opacity-0'), 5000); // 5 seconds
-            setTimeout(() => successMessage.style.display = 'none', 5500); // Include transition time
+            setTimeout(() => successMessage.classList.add('opacity-0'), 5000);
+            setTimeout(() => successMessage.style.display = 'none', 5500);
         }
 
         // Error message
@@ -97,17 +89,16 @@
             const errorCountdown = document.getElementById('error-countdown');
             let errorWidth = 100;
             const errorInterval = setInterval(() => {
-                errorWidth -= 100 / 30; // 3 seconds = 3000ms, 100 / (3000 / 100) = 3.33% per 100ms
+                errorWidth -= 100 / 30;
                 errorCountdown.style.width = `${errorWidth}%`;
                 if (errorWidth <= 0) {
                     clearInterval(errorInterval);
                     errorMessage.classList.add('opacity-0');
-                    setTimeout(() => errorMessage.style.display = 'none',
-                        300); // Match transition duration
+                    setTimeout(() => errorMessage.style.display = 'none', 300);
                 }
             }, 100);
-            setTimeout(() => errorMessage.classList.add('opacity-0'), 3000); // 3 seconds
-            setTimeout(() => errorMessage.style.display = 'none', 3300); // Include transition time
+            setTimeout(() => errorMessage.classList.add('opacity-0'), 3000);
+            setTimeout(() => errorMessage.style.display = 'none', 3300);
         }
     });
 </script>
