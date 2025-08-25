@@ -4,6 +4,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\AdminBlogController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\Admin\AdminStaffController;
+use App\Http\Controllers\Admin\AdminStaffSkillController;
+use App\Http\Controllers\Admin\AdminServiceController;
 use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
@@ -13,6 +16,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\StaffController;
+use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -33,13 +38,19 @@ Route::middleware('auth')->group(function () {
         Route::resource('categories', AdminCategoryController::class);
         Route::resource('products', AdminProductController::class);
         Route::resource('blogs', AdminBlogController::class);
+        Route::resource('team', AdminStaffController::class);
+        Route::resource('services', AdminServiceController::class);
+        Route::get('team/{staffId}/create-skill', [AdminStaffSkillController::class, 'create'])->name('staff-skill.create');
+        Route::post('team/{staffId}/store-skill', [AdminStaffSkillController::class, 'store'])->name('staff-skill.store');
     });
 });
 
 // Public pages
 Route::get('/about', [HomeController::class, 'about'])->name('about');
-Route::get('/services', [HomeController::class, 'services'])->name('services');
-Route::get('/team', [HomeController::class, 'team'])->name('team');
+Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
+Route::get('/services/{id}', [ServiceController::class, 'show'])->name('services.show');
+Route::get('/team', [StaffController::class, 'index'])->name('team');
+Route::get('/team/{id}', [StaffController::class, 'show'])->name('team.show');
 Route::get('/appointment', [HomeController::class, 'appointment'])->name('appointment');
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
 // Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');

@@ -33,26 +33,16 @@
                     <h2 class="text-xl font-semibold text-gray-800">Quản lý bài viết</h2>
                     <p class="text-gray-600 mt-2">Thêm, sửa, xóa bài viết</p>
                 </a>
-                {{-- <a href="{{ route('admin.carts.index') }}"
+                <a href="{{ route('admin.team.index') }}"
                     class="bg-white rounded-lg shadow p-6 text-center hover:bg-gray-50 transition">
-                    <h2 class="text-xl font-semibold text-gray-800">Quản lý giỏ hàng</h2>
-                    <p class="text-gray-600 mt-2">Xem và xóa giỏ hàng của người dùng</p>
+                    <h2 class="text-xl font-semibold text-gray-800">Quản lý nhân viên</h2>
+                    <p class="text-gray-600 mt-2">Thêm, sửa, xóa nhân viên</p>
                 </a>
-                <a href="{{ route('admin.orders.index') }}"
+                <a href="{{ route('admin.services.index') }}"
                     class="bg-white rounded-lg shadow p-6 text-center hover:bg-gray-50 transition">
-                    <h2 class="text-xl font-semibold text-gray-800">Quản lý đơn hàng</h2>
-                    <p class="text-gray-600 mt-2">Xem và cập nhật đơn hàng</p>
+                    <h2 class="text-xl font-semibold text-gray-800">Quản lý dịch vụ bài viết</h2>
+                    <p class="text-gray-600 mt-2">Thêm, sửa, xóa dịch vụ bài viết</p>
                 </a>
-                <a href="{{ route('admin.banners.index') }}"
-                    class="bg-white rounded-lg shadow p-6 text-center hover:bg-gray-50 transition">
-                    <h2 class="text-xl font-semibold text-gray-800">Quản lý banners</h2>
-                    <p class="text-gray-600 mt-2">Xem và cập nhật banners</p>
-                </a>
-                <a href="{{ route('admin.contact.index') }}"
-                    class="bg-white rounded-lg shadow p-6 text-center hover:bg-gray-50 transition">
-                    <h2 class="text-xl font-semibold text-gray-800">Xem liên hệ</h2>
-                    <p class="text-gray-600 mt-2">Xem và phản hồi người dùng</p>
-                </a> --}}
             </div>
         </div>
     </main>

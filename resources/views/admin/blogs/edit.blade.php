@@ -55,7 +55,7 @@
                     </select>
                 </div>
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Cập nhật</button>
-                                <button onclick="location.href='{{ route('admin.blogs.index') }}'" type="submit"
+                                <button onclick="location.href='{{ route('admin.blogs.index') }}'" type="button"
                     class="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer">Quay lại</button>
             </form>
         </div>

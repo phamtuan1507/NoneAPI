@@ -23,7 +23,7 @@
                     <ul
                         class="absolute left-0 top-full min-w-[180px] bg-white shadow-lg rounded-b z-20 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-all">
                         <li>
-                            <a href="{{ route('services') }}" class="flex items-center px-5 py-2 hover:text-[#7a4a2f]">
+                            <a href="{{ route('services.index') }}" class="flex items-center px-5 py-2 hover:text-[#7a4a2f]">
                                 <span class="mr-2 w-2 h-2 bg-[#7a4a2f] rounded-full"></span>
                                 SPA THƯ GIÃN
                             </a>
@@ -198,7 +198,7 @@
                         </button>
                         <ul id="service-menu" class="ml-8 border-l border-[#e5e7eb] hidden">
                             <li>
-                                <a href="{{ route('services') }}" class="block px-5 py-2 hover:text-[#7a4a2f]"
+                                <a href="{{ route('services.index') }}" class="block px-5 py-2 hover:text-[#7a4a2f]"
                                     onclick="closeMobileMenu()">Spa Thư Giãn</a>
                             </li>
                             <li>
